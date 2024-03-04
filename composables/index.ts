@@ -1,2 +1,26 @@
-export const useCounterState = () => useState<number>('count', () => 0)
-// カウンターの数値を保持するように実装
+import { Ref } from 'vue'
+
+// useCounterState 関数: これはカスタムコンポジション関数で、カウンターのロジックをカプセル化する
+export const useCounterState = () => {
+  const count = useState<number>('count', () => 0)
+  return {
+    counter: readonly(count),
+    countUp: countUp(count),
+    countDown: countDown(count),
+    Reset: Reset(count)
+  }
+}
+
+const countUp = (count: Ref<number>) => () => {
+  count.value++
+}
+
+const countDown = (count: Ref<number>) => () => {
+  if(count.value > 0) {
+    count.value--
+  }
+}
+
+const Reset = (count: Ref<number>) => () => {
+  count.value = 0
+}
